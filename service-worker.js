@@ -1,8 +1,6 @@
 const CACHE = 'docbook-v1';
-const ASSETS = ['./'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(()=>{})));
   self.skipWaiting();
 });
 
@@ -16,9 +14,11 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  // فقط GET requests من نفس الـ origin
+  if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
-  // Firebase / CDN — always network
-  if (!url.origin.includes(self.location.origin)) return;
+  if (url.origin !== self.location.origin) return;
+
   e.respondWith(
     fetch(e.request)
       .then(res => {

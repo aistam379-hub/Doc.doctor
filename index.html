@@ -2,6 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
+  <!-- ══ PWA ══ -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="دكتور" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-doctor-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-doctor-512.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-doctor-192.png" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>لوحة الطبيب - النسخة النهائية</title>
   <meta name="theme-color" content="#0d9488" />
@@ -843,16 +852,6 @@
   .ln-eye.show-pass .ln-eye-open{display:none;} .ln-eye.show-pass .ln-eye-closed{display:block;}
   @media(max-width:480px){.ln-card{padding:32px 24px 28px;} .ln-title{font-size:22px;}}
   </style>
-
-  <!-- ══ PWA ══ -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="دكتور" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-doctor-192.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-doctor-512.png" />
-  <link rel="apple-touch-icon" href="icon-doctor-192.png" />
 </head>
 <body>
 
@@ -3190,16 +3189,11 @@
   <!-- ══ Swipe Back ══ -->
   <script>
   (function(){
-    var startX=0, startY=0;
-    document.addEventListener('touchstart',function(e){
-      startX=e.touches[0].clientX; startY=e.touches[0].clientY;
-    },{passive:true});
+    var sx=0,sy=0;
+    document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
     document.addEventListener('touchend',function(e){
-      var dx=e.changedTouches[0].clientX-startX;
-      var dy=e.changedTouches[0].clientY-startY;
-      if(startX<=60 && dx>80 && Math.abs(dy)<60){
-        if(window.history.length>1) window.history.back();
-      }
+      var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+      if(sx<=60&&dx>80&&Math.abs(dy)<60){if(window.history.length>1)window.history.back();}
     },{passive:true});
   })();
   </script>
@@ -3208,8 +3202,8 @@
   if('serviceWorker' in navigator){
     window.addEventListener('load',function(){
       navigator.serviceWorker.register('service-worker.js')
-        .then(function(r){console.log('[SW] ok',r.scope);})
-        .catch(function(e){console.warn('[SW] fail',e);});
+        .then(function(r){console.log('[SW]',r.scope);})
+        .catch(function(e){console.warn('[SW fail]',e);});
     });
   }
   </script>
